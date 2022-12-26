@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Color for decrease, increase data -->
+    <color name="dark_green">#FF338F40</color>
+    <color name="dark_red">#FFAD2E2C</color>
 </resources>
