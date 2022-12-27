@@ -28,6 +28,14 @@ public class WalletModel {
     public WalletModel() {
     }
 
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
     public int getIvWallet() {
         return ivWallet;
     }

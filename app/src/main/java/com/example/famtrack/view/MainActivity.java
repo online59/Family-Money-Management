@@ -48,5 +48,8 @@ public class MainActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         viewModel.getAllWallet();
+
+        String path = "user/HTtFP8Oh1hd1nDUxzufhdMBzHx93";
+        viewModel.requestUserData(path, this);
     }
 }
