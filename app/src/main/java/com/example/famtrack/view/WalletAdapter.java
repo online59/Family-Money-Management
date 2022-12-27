@@ -17,35 +17,56 @@ import com.example.famtrack.vm.MainViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletViewHolder> {
+public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletViewHolder> implements View.OnClickListener {
 
     private List<WalletModel> dataList = new ArrayList<>();
+    private OnItemClickListener onItemClickListener;
 
     public WalletAdapter(MainViewModel viewModel, LifecycleOwner lifecycleOwner) {
         viewModel.getAllWallet().observe(lifecycleOwner, walletData -> {
             dataList = walletData;
             notifyDataSetChanged();
         });
-
     }
 
     @NonNull
     @Override
     public WalletViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_wallet, parent, false);
+        view.setOnClickListener(this);
         return new WalletViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull WalletViewHolder holder, int position) {
         if (position != RecyclerView.NO_POSITION) {
-
+            WalletModel item = dataList.get(position);
+            holder.getIvWallet().setImageResource(item.getIvWallet());
+            holder.getTvCurrentBalance().setText(item.getTvCurrentBalance());
+            holder.getTvWalletName().setText(item.getTvWalletName());
+            holder.getTvLastActiveTime().setText(item.getTvLastActive());
+            holder.getTvMemberCount().setText(item.getTvMemberCount());
         }
     }
 
     @Override
     public int getItemCount() {
         return dataList == null ? 0 : dataList.size();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (onItemClickListener != null) {
+            onItemClickListener.onItemClick(v, (int) v.getTag());
+        }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
     }
 
     public static class WalletViewHolder extends RecyclerView.ViewHolder{
