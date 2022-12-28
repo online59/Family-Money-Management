@@ -1,14 +1,14 @@
 package com.example.famtrack.vm;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
 import com.example.famtrack.api.FirebaseRepository;
+import com.example.famtrack.api.Payment;
+import com.example.famtrack.api.Wallet;
 import com.example.famtrack.database.WalletModel;
 import com.example.famtrack.database.WalletRepository;
 
@@ -17,8 +17,8 @@ import java.util.List;
 public class MainViewModel extends AndroidViewModel {
 
     private static final String TAG = "com.example.famtrack.vm.MainViewModel";
-    private WalletRepository walletRepository;
-    private FirebaseRepository firebaseRepository;
+    private final WalletRepository walletRepository;
+    private final FirebaseRepository firebaseRepository;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -30,9 +30,11 @@ public class MainViewModel extends AndroidViewModel {
         return walletRepository.getAllWallet();
     }
 
-    public void requestUserData(String path, LifecycleOwner lifecycleOwner) {
-        firebaseRepository.requestAllWallet(path).observe(lifecycleOwner, userData -> {
-            Log.e(TAG, "requestUserData: " + userData);
-        });
+    public LiveData<List<Wallet>> requestAllWallet(String path) {
+        return firebaseRepository.requestAllWallet(path);
+    }
+
+    public LiveData<List<Payment>> requestAllPayment(String path) {
+        return firebaseRepository.requestAllPayment(path);
     }
 }

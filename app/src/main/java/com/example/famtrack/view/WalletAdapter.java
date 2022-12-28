@@ -11,19 +11,19 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.famtrack.R;
-import com.example.famtrack.database.WalletModel;
+import com.example.famtrack.api.Wallet;
 import com.example.famtrack.vm.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletViewHolder> implements View.OnClickListener {
+public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletViewHolder> {
 
-    private List<WalletModel> dataList = new ArrayList<>();
+    private List<Wallet> dataList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
 
-    public WalletAdapter(MainViewModel viewModel, LifecycleOwner lifecycleOwner) {
-        viewModel.getAllWallet().observe(lifecycleOwner, walletData -> {
+    public WalletAdapter(String path, MainViewModel viewModel, LifecycleOwner lifecycleOwner) {
+        viewModel.requestAllWallet(path).observe(lifecycleOwner, walletData -> {
             dataList = walletData;
             notifyDataSetChanged();
         });
@@ -33,19 +33,18 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
     @Override
     public WalletViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_wallet, parent, false);
-        view.setOnClickListener(this);
         return new WalletViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull WalletViewHolder holder, int position) {
         if (position != RecyclerView.NO_POSITION) {
-            WalletModel item = dataList.get(position);
-            holder.getIvWallet().setImageResource(item.getIvWallet());
-            holder.getTvCurrentBalance().setText(item.getTvCurrentBalance());
-            holder.getTvWalletName().setText(item.getTvWalletName());
-            holder.getTvLastActiveTime().setText(item.getTvLastActive());
-            holder.getTvMemberCount().setText(item.getTvMemberCount());
+            Wallet item = dataList.get(position);
+            holder.getIvWallet().setImageResource(R.drawable.united_states);
+            holder.getTvCurrentBalance().setText(String.valueOf(item.getGroupBalance()));
+            holder.getTvWalletName().setText(item.getGroupName());
+            holder.getTvLastActiveTime().setText(String.valueOf(item.getGroupActiveTime()));
+            holder.getTvMemberCount().setText(String.valueOf(item.getGroupMember().size()));
         }
     }
 
@@ -54,25 +53,18 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
         return dataList == null ? 0 : dataList.size();
     }
 
-    @Override
-    public void onClick(View v) {
-        if (onItemClickListener != null) {
-            onItemClickListener.onItemClick(v, (int) v.getTag());
-        }
-    }
-
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(int position);
     }
 
-    public static class WalletViewHolder extends RecyclerView.ViewHolder{
-
+    public class WalletViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final ImageView ivWallet;
         private final TextView tvWalletName, tvCurrentBalance, tvLastActiveTime, tvMemberCount;
+
         public WalletViewHolder(@NonNull View itemView) {
             super(itemView);
             ivWallet = itemView.findViewById(R.id.iv_wallet);
@@ -80,6 +72,8 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
             tvCurrentBalance = itemView.findViewById(R.id.tv_current_balance);
             tvLastActiveTime = itemView.findViewById(R.id.tv_last_active_time);
             tvMemberCount = itemView.findViewById(R.id.tv_member_count);
+
+            itemView.setOnClickListener(this);
         }
 
         public ImageView getIvWallet() {
@@ -100,6 +94,13 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
 
         public TextView getTvMemberCount() {
             return tvMemberCount;
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(getAdapterPosition());
+            }
         }
     }
 }

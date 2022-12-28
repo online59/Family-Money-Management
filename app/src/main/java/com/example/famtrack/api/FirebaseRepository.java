@@ -13,9 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class FirebaseRepository {
 
@@ -40,16 +38,16 @@ public class FirebaseRepository {
 
         MutableLiveData<List<Wallet>> walletList = new MutableLiveData<>();
 
-        databaseReference.child(path).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child(path).child("groups").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                Map<String, Object> map = new HashMap<>();
+                List<Wallet> list = new ArrayList<>();
 
                 for (DataSnapshot data : snapshot.getChildren()) {
-                    map.put(data.getKey(), data.getValue());
-                    Log.e(TAG, "onDataChange: " + map);
+                    list.add(data.getValue(Wallet.class));
                 }
+                walletList.setValue(list);
             }
 
             @Override
