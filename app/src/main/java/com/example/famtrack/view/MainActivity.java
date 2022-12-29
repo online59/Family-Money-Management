@@ -15,7 +15,7 @@ import com.example.famtrack.vm.MainViewModel;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "com.example.famtrack.view.MainActivity";
-    private final String path = "user/HTtFP8Oh1hd1nDUxzufhdMBzHx93";
+    private final String userUid = "HTtFP8Oh1hd1nDUxzufhdMBzHx93";
     private MainViewModel viewModel;
 
     @Override
@@ -30,23 +30,23 @@ public class MainActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_wallet);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        WalletAdapter adapter = new WalletAdapter(path, viewModel, this);
+        WalletAdapter adapter = new WalletAdapter(userUid, viewModel, this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
 
         // Handling click events
-        Intent intent = new Intent(this, PaymentActivity.class);
+        Intent goToPayment = new Intent(this, PaymentActivity.class);
         adapter.setOnItemClickListener(position -> {
             Log.e(TAG, "onItemClick: Position = " + position);
-            startActivity(intent);
+            startActivity(goToPayment);
         });
     }
 
     private void myInit() {
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        viewModel.requestAllWallet(path);
+        viewModel.requestAllWallet(userUid);
     }
 }

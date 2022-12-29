@@ -1,7 +1,5 @@
 package com.example.famtrack.api;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -19,11 +17,11 @@ public class FirebaseRepository {
 
     private static final String TAG = "com.example.famtrack.api.FirebaseRepository";
     private static FirebaseRepository instance;
-    private final DatabaseReference databaseReference;
+    private final DatabaseReference firebaseReferenceAPI;
 
     public FirebaseRepository() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
+        firebaseReferenceAPI = firebaseDatabase.getReference();
     }
 
     public static FirebaseRepository getInstance() {
@@ -36,52 +34,52 @@ public class FirebaseRepository {
 
     public LiveData<List<Wallet>> requestAllWallet(@NonNull String path) {
 
-        MutableLiveData<List<Wallet>> walletList = new MutableLiveData<>();
+        MutableLiveData<List<Wallet>> mutableWalletList = new MutableLiveData<>();
 
-        databaseReference.child(path).child("groups").addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseReferenceAPI.child("user").child(path).child("groups").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                List<Wallet> list = new ArrayList<>();
+                List<Wallet> walletList = new ArrayList<>();
 
-                for (DataSnapshot data : snapshot.getChildren()) {
-                    list.add(data.getValue(Wallet.class));
+                for (DataSnapshot walletSnapshotData : snapshot.getChildren()) {
+                    walletList.add(walletSnapshotData.getValue(Wallet.class));
                 }
-                walletList.setValue(list);
+                mutableWalletList.setValue(walletList);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                walletList.setValue(null);
+                mutableWalletList.setValue(null);
             }
         });
 
-        return walletList;
+        return mutableWalletList;
     }
 
     public LiveData<List<Payment>> requestAllPayment(@NonNull String path) {
 
-        MutableLiveData<List<Payment>> paymentDataList = new MutableLiveData<>();
+        MutableLiveData<List<Payment>> mutablePaymentList = new MutableLiveData<>();
 
-        databaseReference.child(path).addValueEventListener(new ValueEventListener() {
+        firebaseReferenceAPI.child("trans").child(path).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                List<Payment> list = new ArrayList<>();
+                List<Payment> paymentList = new ArrayList<>();
 
-                for (DataSnapshot data : snapshot.getChildren()) {
-                    list.add(data.getValue(Payment.class));
+                for (DataSnapshot paymentSnapshotData : snapshot.getChildren()) {
+                    paymentList.add(paymentSnapshotData.getValue(Payment.class));
                 }
-                paymentDataList.setValue(list);
+                mutablePaymentList.setValue(paymentList);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                paymentDataList.setValue(null);
+                mutablePaymentList.setValue(null);
             }
         });
 
-        return paymentDataList;
+        return mutablePaymentList;
     }
 
 }

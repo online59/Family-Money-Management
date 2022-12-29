@@ -21,21 +21,21 @@ import java.util.List;
 
 public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentViewHolder> {
 
-    private List<Payment> dataList = new ArrayList<>();
-    private final MutableLiveData<List<Payment>> paymentDataList = new MutableLiveData<>();
+    private List<Payment> paymentList = new ArrayList<>();
+    private final MutableLiveData<List<Payment>> mutablePaymentList = new MutableLiveData<>();
     private OnItemClickListener onItemClickListener;
 
     public PaymentAdapter(String path, MainViewModel viewModel, LifecycleOwner lifecycleOwner) {
-        viewModel.requestAllPayment(path).observe(lifecycleOwner, paymentData -> {
-            dataList = paymentData;
-            paymentDataList.setValue(paymentData);
+        viewModel.requestAllPayment(path).observe(lifecycleOwner, requestedPaymentList -> {
+            paymentList = requestedPaymentList;
+            mutablePaymentList.setValue(requestedPaymentList);
             notifyDataSetChanged();
         });
 
     }
 
-    public LiveData<List<Payment>> getDataList() {
-        return paymentDataList;
+    public LiveData<List<Payment>> getPaymentList() {
+        return mutablePaymentList;
     }
 
     @NonNull
@@ -48,8 +48,8 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
     @Override
     public void onBindViewHolder(@NonNull PaymentViewHolder holder, int position) {
         if (position != RecyclerView.NO_POSITION) {
-            Payment item = dataList.get(position);
-            holder.getIvPayment().setImageResource(R.drawable.united_kingdom);
+            Payment item = paymentList.get(position);
+            holder.getIconPayment().setImageResource(R.drawable.united_kingdom);
             holder.getTvPaymentType().setText(item.getTransCategory());
             holder.getTvAmount().setText(item.getTransTotal());
         }
@@ -57,7 +57,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
 
     @Override
     public int getItemCount() {
-        return dataList == null ? 0 : dataList.size();
+        return paymentList == null ? 0 : paymentList.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -70,13 +70,13 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
 
     public class PaymentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private final ImageView ivPayment;
+        private final ImageView iconPayment;
         private final TextView tvPaymentType, tvAmount;
 
         public PaymentViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            ivPayment = itemView.findViewById(R.id.iv_payment);
+            iconPayment = itemView.findViewById(R.id.iv_payment);
             tvPaymentType = itemView.findViewById(R.id.tv_payment_type);
             tvAmount = itemView.findViewById(R.id.tv_amount);
 
@@ -90,8 +90,8 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
             }
         }
 
-        public ImageView getIvPayment() {
-            return ivPayment;
+        public ImageView getIconPayment() {
+            return iconPayment;
         }
 
         public TextView getTvPaymentType() {
