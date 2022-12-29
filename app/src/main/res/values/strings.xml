@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FamTrack</string>
+    <string name="add_payment">Add Payment</string>
 </resources>

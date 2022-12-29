@@ -11,4 +11,10 @@
     <!-- Color for decrease, increase data -->
     <color name="dark_green">#FF338F40</color>
     <color name="dark_red">#FFAD2E2C</color>
+
+    <color name="normal_text">#FF75777B</color>
+    <color name="edit_text_outline">#FFB5A9F6</color>
+    <color name="edit_text_background">#FFFAF9FF</color>
+    <color name="inactive_button_background">#FFDCDBE1</color>
+    <color name="inactive_button_text">#FFFBFBFB</color>
 </resources>
