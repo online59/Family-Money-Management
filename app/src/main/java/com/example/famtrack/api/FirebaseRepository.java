@@ -21,6 +21,7 @@ public class FirebaseRepository {
 
     public FirebaseRepository() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase.setPersistenceEnabled(true); // Enable disk persistence
         firebaseReferenceAPI = firebaseDatabase.getReference();
     }
 

@@ -20,7 +20,7 @@ public class PaymentActivity extends AppCompatActivity {
 
     private static final String TAG = "com.example.famtrack.view.PaymentActivity";
     private MainViewModel viewModel;
-    private final String userUid = "HTtFP8Oh1hd1nDUxzufhdMBzHx93";
+    private final String walletUid = "HTtFP8Oh1hd1nDUxzufhdMBzHx93";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class PaymentActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_payment);
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        PaymentAdapter paymentAdapter = new PaymentAdapter(userUid, viewModel, this);
+        PaymentAdapter paymentAdapter = new PaymentAdapter(walletUid, viewModel, this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
         HeaderItemDecoration headerItemDecoration = new HeaderItemDecoration(true, getHeaderCallback(paymentAdapter));
 

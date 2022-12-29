@@ -15,7 +15,7 @@ import com.example.famtrack.vm.MainViewModel;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "com.example.famtrack.view.MainActivity";
-    private final String userUid = "HTtFP8Oh1hd1nDUxzufhdMBzHx93";
+    private final String walletUid = "HTtFP8Oh1hd1nDUxzufhdMBzHx93";
     private MainViewModel viewModel;
 
     @Override
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_wallet);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        WalletAdapter adapter = new WalletAdapter(userUid, viewModel, this);
+        WalletAdapter adapter = new WalletAdapter(walletUid, viewModel, this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(manager);
@@ -47,6 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private void myInit() {
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        viewModel.requestAllWallet(userUid);
+        viewModel.requestAllWallet(walletUid);
     }
 }
