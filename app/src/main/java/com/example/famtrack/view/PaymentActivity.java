@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.famtrack.R;
+import com.example.famtrack.utils.Constants;
 import com.example.famtrack.vm.MainViewModel;
 
 
@@ -20,7 +21,7 @@ public class PaymentActivity extends AppCompatActivity {
 
     private static final String TAG = "com.example.famtrack.view.PaymentActivity";
     private MainViewModel viewModel;
-    private final String walletUid = "HTtFP8Oh1hd1nDUxzufhdMBzHx93";
+    private String walletUid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,9 @@ public class PaymentActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        // Get walletUid intent from MainActivity
+        walletUid = getIntent().getStringExtra(Constants.INTENT_WALLET_UID_KEY);
     }
 
     @Override

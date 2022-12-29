@@ -13,9 +13,13 @@
         android:theme="@style/Theme.FamTrack"
         tools:targetApi="31">
         <activity
+            android:name=".view.AddPayment"
+            android:exported="false"
+            android:parentActivityName=".view.MainActivity" />
+        <activity
             android:name=".view.PaymentActivity"
-            android:parentActivityName=".view.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".view.MainActivity" />
         <activity
             android:name=".view.MainActivity"
             android:exported="true"

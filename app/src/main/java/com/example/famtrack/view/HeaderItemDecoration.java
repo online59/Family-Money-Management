@@ -2,6 +2,7 @@ package com.example.famtrack.view;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.famtrack.R;
 
 public class HeaderItemDecoration extends RecyclerView.ItemDecoration {
+    private static final String TAG = "com.example.famtrack.view.HeaderItemDecoration";
     private View mHeaderView;
     private final boolean mSticky;
     private TextView tvHeader;
@@ -35,6 +37,8 @@ public class HeaderItemDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
 
+        Log.e(TAG, "getItemOffsets: called" );
+
         int position = parent.getChildAdapterPosition(view);
         if (headerCallback.isHeader(position)) {
             outRect.top = mHeaderView.getHeight();
@@ -44,6 +48,8 @@ public class HeaderItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
+
+        Log.e(TAG, "onDrawOver: called" );
 
         if (mHeaderView == null) {
             mHeaderView = inflateHeader(parent);

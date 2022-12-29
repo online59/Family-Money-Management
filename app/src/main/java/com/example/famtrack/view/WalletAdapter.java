@@ -64,7 +64,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
     }
 
     public interface OnItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(int position, String walletUid);
     }
 
     public class WalletViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -85,7 +85,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
         @Override
         public void onClick(View view) {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(getAdapterPosition());
+                onItemClickListener.onItemClick(getAdapterPosition(), walletList.get(getAdapterPosition()).getGroupId());
             }
         }
 
