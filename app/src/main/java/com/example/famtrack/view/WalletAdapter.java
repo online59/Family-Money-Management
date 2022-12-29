@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.famtrack.R;
 import com.example.famtrack.api.Wallet;
+import com.example.famtrack.utils.Utils;
 import com.example.famtrack.vm.MainViewModel;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
             holder.getIconWallet().setImageResource(R.drawable.united_states);
             holder.getTvCurrentBalance().setText(String.valueOf(item.getGroupBalance()));
             holder.getTvWalletName().setText(item.getGroupName());
-            holder.getTvLastActiveTime().setText(String.valueOf(item.getGroupActiveTime()));
+            holder.getTvLastActiveTime().setText(Utils.getDate(item.getGroupActiveTime()));
             holder.getTvMemberCount().setText(String.valueOf(item.getGroupMember().size()));
         }
     }
@@ -51,6 +52,11 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
     @Override
     public int getItemCount() {
         return walletList == null ? 0 : walletList.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return 0;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

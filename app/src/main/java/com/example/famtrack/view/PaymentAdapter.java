@@ -1,5 +1,6 @@
 package com.example.famtrack.view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,34 +9,71 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.famtrack.R;
 import com.example.famtrack.api.Payment;
+import com.example.famtrack.utils.Utils;
 import com.example.famtrack.vm.MainViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentViewHolder> {
 
-    private List<Payment> paymentList = new ArrayList<>();
-    private final MutableLiveData<List<Payment>> mutablePaymentList = new MutableLiveData<>();
+    private static final String TAG = "com.example.famtrack.view.PaymentAdapter";
+    private List<Payment> sortedPaymentList = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
 
     public PaymentAdapter(String path, MainViewModel viewModel, LifecycleOwner lifecycleOwner) {
         viewModel.requestAllPayment(path).observe(lifecycleOwner, requestedPaymentList -> {
-            paymentList = requestedPaymentList;
-            mutablePaymentList.setValue(requestedPaymentList);
+
+            // Sort payment by its transaction date
+            Collections.sort(requestedPaymentList);
+            sortedPaymentList = requestedPaymentList;
+
             notifyDataSetChanged();
         });
-
     }
 
-    public LiveData<List<Payment>> getPaymentList() {
-        return mutablePaymentList;
+    // The method compare a sorted list of payment and return boolean value of
+    // true if the payment at the specific position is needed to has a new header
+    // and return false if not to
+    public boolean isHeader(int position) {
+        // Because the payment list maybe null, so we check for null
+        if (sortedPaymentList == null) {
+            return false;
+        }
+
+        // If there is no data, not drawing header
+        if (sortedPaymentList.size() == 0) {
+            return false;
+        }
+
+        // At the first item of the list, add a header for it
+        if (position == 0) {
+            return true;
+        }
+
+        // Compare date of two items next to each other whether they should have their new header
+        // or should just follow the same header
+        String currentHeader = Utils.getDate(sortedPaymentList.get(position).getTransDate());
+        String previousHeader = Utils.getDate(sortedPaymentList.get(position - 1).getTransDate());
+
+        // If the current header name match the previous header, not drawing header, else draw header
+        return !currentHeader.equalsIgnoreCase(previousHeader);
+    }
+
+    // This method return a string value for header if the header is needed to be created
+    public String getHeader(int position) {
+
+        if (sortedPaymentList == null || sortedPaymentList.size() == 0) {
+            return "";
+        }
+
+        // Text to put as a header
+        return Utils.getDate(sortedPaymentList.get(position).getTransDate());
     }
 
     @NonNull
@@ -48,7 +86,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
     @Override
     public void onBindViewHolder(@NonNull PaymentViewHolder holder, int position) {
         if (position != RecyclerView.NO_POSITION) {
-            Payment item = paymentList.get(position);
+            Payment item = sortedPaymentList.get(position);
             holder.getIconPayment().setImageResource(R.drawable.united_kingdom);
             holder.getTvPaymentType().setText(item.getTransCategory());
             holder.getTvAmount().setText(item.getTransTotal());
@@ -57,7 +95,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
 
     @Override
     public int getItemCount() {
-        return paymentList == null ? 0 : paymentList.size();
+        return sortedPaymentList == null ? 0 : sortedPaymentList.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -68,7 +106,7 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
         void onItemClick(int position);
     }
 
-    public class PaymentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class PaymentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final ImageView iconPayment;
         private final TextView tvPaymentType, tvAmount;

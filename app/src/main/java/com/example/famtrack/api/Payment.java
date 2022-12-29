@@ -1,11 +1,40 @@
 package com.example.famtrack.api;
 
-public class Payment {
+public class Payment implements Comparable<Payment>{
 
     private long postTime, transDate;
     private int transImage;
     private String transCategory, transCategoryId, transNote, transTotal, transWalletId;
 
+    // Override compareTo method from Comparable interface
+    @Override
+    public int compareTo(Payment payment) {
+
+        // CHeck if object is null
+        if (getTransDate() == 0 || payment.getTransDate() == 0) {
+            return 0;
+        }
+
+        // Sort is of payment object by transDate
+        return compare(getTransDate(), payment.getTransDate());
+    }
+
+    // Compare two long and return negative, zero and positive value
+    // if the object is less than, equal to and greater than the specific object
+    private int compare(long specificPayment, long thisPayment) {
+        int result;
+
+        if ((specificPayment - thisPayment) > 0) {
+            result = -1;
+        } else if ((specificPayment - thisPayment) < 0) {
+            result = 1;
+        } else {
+            result = 0;
+        }
+        return result;
+    }
+
+    // Empty constructor
     public Payment() {
     }
 

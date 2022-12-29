@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,11 +13,8 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.famtrack.R;
-import com.example.famtrack.api.Payment;
-import com.example.famtrack.utils.Utils;
 import com.example.famtrack.vm.MainViewModel;
 
-import java.util.List;
 
 public class PaymentActivity extends AppCompatActivity {
 
@@ -35,18 +33,19 @@ public class PaymentActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_payment);
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        PaymentAdapter adapter = new PaymentAdapter(userUid, viewModel, this);
-        DividerItemDecoration separatorDecoration = new DividerItemDecoration(this);
-        HeaderItemDecoration headerDecoration = new HeaderItemDecoration(true, getHeaderCallback(adapter.getPaymentList().getValue()));
+        RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        PaymentAdapter paymentAdapter = new PaymentAdapter(userUid, viewModel, this);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
+        HeaderItemDecoration headerItemDecoration = new HeaderItemDecoration(true, getHeaderCallback(paymentAdapter));
 
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addItemDecoration(separatorDecoration);
-        recyclerView.addItemDecoration(headerDecoration);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(paymentAdapter);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.addItemDecoration(headerItemDecoration);
 
-        adapter.setOnItemClickListener(position -> Log.e(TAG, "onItemClick: " + position));
+        // Set item click listener
+        paymentAdapter.setOnItemClickListener(position -> Log.e(TAG, "onItemClick: " + position));
     }
 
     private void myInit() {
@@ -54,7 +53,9 @@ public class PaymentActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -68,43 +69,19 @@ public class PaymentActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private HeaderItemDecoration.HeaderCallback getHeaderCallback(final List<Payment> paymentList) {
+    private HeaderItemDecoration.HeaderCallback getHeaderCallback(final PaymentAdapter paymentAdapter) {
 
         return new HeaderItemDecoration.HeaderCallback() {
             @Override
             public boolean isHeader(int position) {
 
-                // Because the payment list maybe null, so we check for null
-                if (paymentList == null) {
-                    return false;
-                }
-
-                // If there is no data, not drawing header
-                if (paymentList.size() == 0) {
-                    return false;
-                }
-
-                // At the first item of the list, make it the header
-                if (position == 0) {
-                    return true;
-                }
-
-                String currentHeader = Utils.getDate(paymentList.get(position).getTransDate());
-                String previousHeader = Utils.getDate(paymentList.get(position - 1).getTransDate());
-
-                // If the current header name match the previous header, not drawing header, else draw header
-                return !currentHeader.equalsIgnoreCase(previousHeader);
+                return paymentAdapter.isHeader(position);
             }
 
             @Override
             public String getHeader(int position) {
 
-                if (paymentList == null || paymentList.size() == 0) {
-                    return "";
-                }
-
-                // Text to put as a header
-                return Utils.getDate(paymentList.get(position).getTransDate());
+                return paymentAdapter.getHeader(position);
             }
         };
     }
