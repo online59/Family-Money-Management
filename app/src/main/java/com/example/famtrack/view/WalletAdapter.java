@@ -45,7 +45,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
             holder.getTvCurrentBalance().setText(String.valueOf(item.getGroupBalance()));
             holder.getTvWalletName().setText(item.getGroupName());
             holder.getTvLastActiveTime().setText(Utils.getDate(item.getGroupActiveTime()));
-            holder.getTvMemberCount().setText(String.valueOf(item.getGroupMember().size()));
+            holder.getTvMemberCount().setText(String.valueOf(item.getGroupMember()));
         }
     }
 

@@ -28,7 +28,7 @@ public class ServerDao {
 
     private ServerDao() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.setPersistenceEnabled(true); // Enable disk persistence
+//        firebaseDatabase.setPersistenceEnabled(true); // Enable disk persistence
 
         firebaseReferenceAPI = firebaseDatabase.getReference();
     }

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Wallet {
     private String groupId;
-    private List<String> groupMember;
+    private int groupMember;
     private String groupName;
     private String groupImage;
     private int groupBalance;
@@ -45,11 +45,11 @@ public class Wallet {
         this.groupId = groupId;
     }
 
-    public List<String> getGroupMember() {
+    public int getGroupMember() {
         return groupMember;
     }
 
-    public void setGroupMember(List<String> groupMember) {
+    public void setGroupMember(int groupMember) {
         this.groupMember = groupMember;
     }
 
