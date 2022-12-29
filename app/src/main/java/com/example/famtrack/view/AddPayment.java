@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.famtrack.R;
 import com.example.famtrack.api.Category;
@@ -39,8 +40,9 @@ public class AddPayment extends AppCompatActivity {
 
         adapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onItemClick(View view , int position) {
                 Log.e(TAG, "onItemClick: " + position );
+                view.setBackgroundColor(getResources().getColor(R.color.dark_green));
             }
         });
     }

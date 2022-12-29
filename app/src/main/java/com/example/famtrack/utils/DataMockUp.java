@@ -14,13 +14,16 @@ public class DataMockUp {
         List<Category> categoryList = new ArrayList<>();
         Category category;
 
-        String[] listOfCategory = {"Transportation", "Accommodation", "Lunch", "Breakfast", "Dinner", "Dessert", "Shopping", "Fuel", "Bill"};
+        String[] expenseCategoryList = {"Transportation", "Accommodation", "Lunch", "Breakfast", "Dinner",
+                "Desserts", "Shopping", "Fuel", "Bills", "Education", "Kids", "Pets", "Saving", "Healthcare",
+                "Drinks", "Rents", "Troll Way", "Travel", "Clothing", "Utilities", "Groceries", "iTunes",
+                "Youtube Music", "Netflix", "Disney+ Hotstar", "Other"};
 
-        for (int i = 0; i < listOfCategory.length; i++) {
+        for (int i = 0; i < expenseCategoryList.length; i++) {
             category = new Category();
             category.setCategoryUid("categoryId" + i);
             category.setIconCategory(R.drawable.european_union);
-            category.setTvCategoryName(listOfCategory[i]);
+            category.setTvCategoryName(expenseCategoryList[i]);
 
             categoryList.add(category);
         }
