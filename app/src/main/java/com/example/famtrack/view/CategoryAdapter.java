@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.famtrack.R;
@@ -47,6 +49,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         this.onItemClickListener = onItemClickListener;
     }
 
+    // Set each item in recyclerview to use its position as their id
+    @Override
+    public long getItemId(int position) {
+        return (long) position;
+    }
+
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
     }
@@ -72,6 +80,23 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         public TextView getTvCategoryName() {
             return tvCategoryName;
+        }
+
+
+        // Provide item details for ItemDetailsLookup class
+        public ItemDetailsLookup.ItemDetails<Long> getItemDetails() {
+            return new ItemDetailsLookup.ItemDetails<Long>() {
+                @Override
+                public int getPosition() {
+                    return getAdapterPosition();
+                }
+
+                @Nullable
+                @Override
+                public Long getSelectionKey() {
+                    return getItemId();
+                }
+            };
         }
     }
 }

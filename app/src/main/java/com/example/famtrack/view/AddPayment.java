@@ -31,10 +31,12 @@ public class AddPayment extends AppCompatActivity {
 
     private void setupCategoryRecycler() {
         RecyclerView recyclerView = findViewById(R.id.category_recycler_view);
-        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(3, LinearLayoutManager.HORIZONTAL);
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.HORIZONTAL);
         CategoryAdapter adapter = new CategoryAdapter();
+        adapter.setHasStableIds(true);
 
         recyclerView.setHasFixedSize(true);
+        recyclerView.setClipToPadding(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
