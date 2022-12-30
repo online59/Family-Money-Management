@@ -1,5 +1,6 @@
 package com.example.famtrack.view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         private final TextView tvCategoryName;
 
         private int lastPosition = RecyclerView.NO_POSITION;
+        private View lastView = null;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,11 +86,20 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(view, getAdapterPosition());
 
+                Log.e("TAG", "lastPosition1: " + lastPosition);
                 if (lastPosition != getAdapterPosition()) {
                     lastPosition = getAdapterPosition();
+                    Log.e("TAG", "lastPosition2: " + lastPosition);
                     view.setActivated(true);
-                } else {
-                    view.setActivated(false);
+
+                    if (lastView != null) {
+                        lastView.setActivated(false);
+                        Log.e("TAG", "onClick: called");
+                    }
+
+                    Log.e("TAG", "lastView1: " + lastView);
+                    lastView = view;
+                    Log.e("TAG", "lastView2: " + lastView);
                 }
             }
         }
