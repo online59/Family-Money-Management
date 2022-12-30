@@ -1,4 +1,4 @@
-package com.example.famtrack.view;
+package com.example.famtrack.helper;
 
 import android.view.MotionEvent;
 import android.view.View;
@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.famtrack.view.CategoryAdapter;
 
 public class MyItemDetailsLookup extends ItemDetailsLookup<Long>{
 

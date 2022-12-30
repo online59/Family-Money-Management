@@ -1,4 +1,4 @@
-package com.example.famtrack.view;
+package com.example.famtrack.helper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,8 +9,10 @@ public class MyItemKeyProvider extends ItemKeyProvider<Long> {
 
     private final RecyclerView recyclerView;
 
-    public MyItemKeyProvider(int scope, RecyclerView recyclerView) {
-        super(scope);
+    public MyItemKeyProvider(RecyclerView recyclerView) {
+        // Since this provide is based on stable ids based on whats laid out in the window
+        // we can only satisfy "window" scope key access.
+        super(SCOPE_CACHED);
         this.recyclerView = recyclerView;
     }
 

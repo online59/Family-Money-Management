@@ -8,19 +8,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.ItemDetailsLookup;
+import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.famtrack.R;
 import com.example.famtrack.api.Category;
 import com.example.famtrack.utils.DataMockUp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>{
 
     private final List<Category> categoryList;
     private OnItemClickListener onItemClickListener;
+    private SelectionTracker<Long> selectionTracker;
 
     public CategoryAdapter() {
         this.categoryList = DataMockUp.createCategoryList();
@@ -37,6 +38,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void onBindViewHolder(@NonNull CategoryAdapter.CategoryViewHolder holder, int position) {
         if (position != RecyclerView.NO_POSITION) {
             holder.getTvCategoryName().setText(categoryList.get(position).getTvCategoryName());
+//            holder.itemView.setActivated(selectionTracker.isSelected((long) position));
         }
     }
 
@@ -47,6 +49,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    public void setSelectionTracker(SelectionTracker<Long> selectionTracker) {
+        this.selectionTracker = selectionTracker;
     }
 
     // Set each item in recyclerview to use its position as their id
@@ -61,7 +67,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView tvCategoryName;
+        private final TextView tvCategoryName;
+
+        private int lastPosition = RecyclerView.NO_POSITION;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -75,6 +83,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         public void onClick(View view) {
             if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(view, getAdapterPosition());
+
+                if (lastPosition != getAdapterPosition()) {
+                    lastPosition = getAdapterPosition();
+                    view.setActivated(true);
+                } else {
+                    view.setActivated(false);
+                }
             }
         }
 

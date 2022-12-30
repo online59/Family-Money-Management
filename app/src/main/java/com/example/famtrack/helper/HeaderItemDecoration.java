@@ -1,4 +1,4 @@
-package com.example.famtrack.view;
+package com.example.famtrack.helper;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.famtrack.R;
 
 public class HeaderItemDecoration extends RecyclerView.ItemDecoration {
-    private static final String TAG = "com.example.famtrack.view.HeaderItemDecoration";
+    private static final String TAG = "com.example.famtrack.helper.HeaderItemDecoration";
     private View mHeaderView;
     private final boolean mSticky;
     private TextView tvHeader;

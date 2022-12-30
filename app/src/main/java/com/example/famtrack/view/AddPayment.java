@@ -1,20 +1,22 @@
 package com.example.famtrack.view;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.selection.StorageStrategy;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import com.example.famtrack.R;
-import com.example.famtrack.api.Category;
+import com.example.famtrack.helper.MyItemDetailsLookup;
+import com.example.famtrack.helper.MyItemKeyProvider;
 
 public class AddPayment extends AppCompatActivity {
 
@@ -42,11 +44,31 @@ public class AddPayment extends AppCompatActivity {
 
         adapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view , int position) {
-                Log.e(TAG, "onItemClick: " + position );
-                view.setBackgroundColor(getResources().getColor(R.color.dark_green));
+            public void onItemClick(View view, int position) {
+                Log.e(TAG, "onItemClick: " + position);
+//                view.setBackgroundColor(getResources().getColor(R.color.dark_green));
             }
         });
+
+        SelectionTracker<Long> selectionTracker = new SelectionTracker.Builder<>(
+                "category_selection",
+                recyclerView,
+                new MyItemKeyProvider(recyclerView),
+                new MyItemDetailsLookup(recyclerView),
+                StorageStrategy.createLongStorage())
+                .build();
+
+        selectionTracker.addObserver(
+                new SelectionTracker.SelectionObserver<Long>() {
+                    @Override
+                    public void onSelectionChanged() {
+                        super.onSelectionChanged();
+                        Log.e(TAG, "onSelectionChanged: You can't select more than 1 item");
+                    }
+                }
+        );
+
+//        adapter.setSelectionTracker(selectionTracker);
     }
 
     private void myInit() {
