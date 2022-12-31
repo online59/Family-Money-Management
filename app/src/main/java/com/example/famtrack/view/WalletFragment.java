@@ -58,7 +58,6 @@ public class WalletFragment extends Fragment {
 
         // Handling click events
         adapter.setOnItemClickListener((position, walletUid) -> {
-            Log.e(TAG, "onItemClick: Position = " + position);
             openSelectedWallet(walletUid);
         });
     }
@@ -73,6 +72,7 @@ public class WalletFragment extends Fragment {
 
         getParentFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, PaymentFragment.class, walletUid)
+                .addToBackStack(null) // Add fragment to back stack
                 .commit();
     }
 }

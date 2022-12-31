@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -34,38 +35,21 @@ public class MainActivity extends AppCompatActivity {
         // First start the wallet fragment to show all user's wallets
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, WalletFragment.class, null, null)
+                .addToBackStack(null) // Add fragment to back stack
                 .commit();
     }
 
     private void myInit() {
-        // Setup toolbar
+
         Toolbar toolbar = findViewById(R.id.tool_bar);
-        toolbar.setNavigationIcon(R.drawable.icon_arrow_back); // Set icon for back button
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Add back button with selected icon
-            getSupportActionBar().setDisplayShowTitleEnabled(false); // Remove default title
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeAsUpIndicator(R.drawable.icon_arrow_back); // Set icon for back button
+            actionBar.setDisplayHomeAsUpEnabled(true); // Add back button with selected icon
+            actionBar.setDisplayShowTitleEnabled(false); // Remove default title
         }
-
-        // Set click listener for navigation button
-        toolbar.setNavigationOnClickListener(navigationClickListener());
-    }
-
-    private View.OnClickListener navigationClickListener() {
-
-        Log.e(TAG, "navigationClickListener: called" );
-        // Check if the current fragment is the WalletFragment
-        if (getCurrentFragment()) {
-            return view -> setupFragment();
-        } else {
-            return null;
-        }
-    }
-
-    private boolean getCurrentFragment() {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        Log.e(TAG, "getCurrentFragment: " + currentFragment );
-        return currentFragment instanceof PaymentFragment;
     }
 
     @Override
@@ -79,9 +63,20 @@ public class MainActivity extends AppCompatActivity {
 
         Intent toAddPaymentPage = new Intent(this, AddPayment.class);
 
-        if (item.getItemId() == R.id.menu_add_payment) {
+        int id = item.getItemId();
+        if (id == R.id.menu_add_payment) {
             startActivity(toAddPaymentPage);
+        } else if (id == android.R.id.home) {
+            onBackPressed(); // Back to previous page
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Check if item in back stack is not less than 1
+        if (!(getSupportFragmentManager().getBackStackEntryCount() <= 1)) {
+            super.onBackPressed();
+        }
     }
 }
