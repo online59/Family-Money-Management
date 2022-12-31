@@ -13,6 +13,7 @@
     <color name="dark_red">#FFAD2E2C</color>
 
     <color name="normal_text">#FF75777B</color>
+    <color name="button_ripple_color">#55ABABAB</color>
     <color name="edit_text_outline">#FFB5A9F6</color>
     <color name="selected_item_background_color">#44BB86FC</color>
     <color name="edit_text_background">#FFFAF9FF</color>

@@ -1,43 +1,60 @@
 package com.example.famtrack.view;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.famtrack.R;
 import com.example.famtrack.helper.HeaderItemDecoration;
 import com.example.famtrack.utils.Constants;
 import com.example.famtrack.vm.MainViewModel;
 
+public class PaymentFragment extends Fragment {
 
-public class PaymentActivity extends AppCompatActivity {
-
-    private static final String TAG = "com.example.famtrack.view.PaymentActivity";
+    private static final String TAG = "com.example.famtrack.view.PaymentFragment";
     private MainViewModel viewModel;
     private String walletUid;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
-
-        myInit();
-        setupRecyclerView();
+    public PaymentFragment() {
+        // Required empty public constructor
     }
 
-    private void setupRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_payment);
-        RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+    public static PaymentFragment newInstance() {
+        return new PaymentFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            walletUid = getArguments().getString(Constants.WALLET_UID_KEY);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_payment, container, false);
+        myInit();
+        setupRecyclerView(view);
+        return view;
+    }
+
+    private void setupRecyclerView(View view) {
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_payment);
+        RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         PaymentAdapter paymentAdapter = new PaymentAdapter(walletUid, viewModel, this);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         HeaderItemDecoration headerItemDecoration = new HeaderItemDecoration(true, getHeaderCallback(paymentAdapter));
 
         recyclerView.setHasFixedSize(true);
@@ -52,26 +69,6 @@ public class PaymentActivity extends AppCompatActivity {
 
     private void myInit() {
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-
-        Toolbar toolbar = findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
-        // Get walletUid intent from MainActivity
-        walletUid = getIntent().getStringExtra(Constants.WALLET_UID_KEY);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        if (item.getItemId() == androidx.appcompat.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private HeaderItemDecoration.HeaderCallback getHeaderCallback(final PaymentAdapter paymentAdapter) {

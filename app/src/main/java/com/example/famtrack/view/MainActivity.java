@@ -5,24 +5,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.famtrack.R;
-import com.example.famtrack.utils.Constants;
-import com.example.famtrack.vm.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "com.example.famtrack.view.MainActivity";
-    private final String walletUid = "HTtFP8Oh1hd1nDUxzufhdMBzHx93";
-    private final String userUid = "HTtFP8Oh1hd1nDUxzufhdMBzHx93";
-    private MainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,35 +27,45 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         myInit();
-        setupRecyclerView();
+        setupFragment();
     }
 
-    private void setupRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_wallet);
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        WalletAdapter adapter = new WalletAdapter(walletUid, viewModel, this);
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setAdapter(adapter);
-
-        // Handling click events
-        Intent toPaymentPage = new Intent(this, PaymentActivity.class);
-        adapter.setOnItemClickListener((position, walletUid) -> {
-            Log.e(TAG, "onItemClick: Position = " + position);
-            toPaymentPage.putExtra(Constants.INTENT_WALLET_UID_KEY, walletUid);
-            startActivity(toPaymentPage);
-        });
+    private void setupFragment() {
+        // First start the wallet fragment to show all user's wallets
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, WalletFragment.class, null, null)
+                .commit();
     }
 
     private void myInit() {
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-
-        viewModel.requestAllWallet(userUid);
-
         // Setup toolbar
         Toolbar toolbar = findViewById(R.id.tool_bar);
+        toolbar.setNavigationIcon(R.drawable.icon_arrow_back); // Set icon for back button
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Add back button with selected icon
+            getSupportActionBar().setDisplayShowTitleEnabled(false); // Remove default title
+        }
+
+        // Set click listener for navigation button
+        toolbar.setNavigationOnClickListener(navigationClickListener());
+    }
+
+    private View.OnClickListener navigationClickListener() {
+
+        Log.e(TAG, "navigationClickListener: called" );
+        // Check if the current fragment is the WalletFragment
+        if (getCurrentFragment()) {
+            return view -> setupFragment();
+        } else {
+            return null;
+        }
+    }
+
+    private boolean getCurrentFragment() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        Log.e(TAG, "getCurrentFragment: " + currentFragment );
+        return currentFragment instanceof PaymentFragment;
     }
 
     @Override
