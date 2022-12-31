@@ -2,8 +2,13 @@ package com.example.famtrack.database;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+
+import com.example.famtrack.R;
+import com.example.famtrack.api.Wallet;
+import com.example.famtrack.utils.Utils;
 
 import java.util.List;
 
@@ -24,19 +29,19 @@ public class WalletRepository {
         return instance;
     }
 
-    public LiveData<List<WalletModel>> getAllWallet() {
+    public LiveData<List<WalletDatabaseModel>> getAllWallet() {
         return walletDao.getAllWallet();
     }
 
-    public void insetNewWallet(WalletModel walletModel) {
-        new InsetNewWalletTask(walletDao).execute(walletModel);
+    public void insetWalletData(List<Wallet> walletList) {
+        new InsetNewWalletTask(walletDao).execute(walletList);
     }
 
     public void deleteWallet() {
         new DeleteWalletTask(walletDao).execute();
     }
 
-    private static class InsetNewWalletTask extends AsyncTask<WalletModel, Void, Void> {
+    private static class InsetNewWalletTask extends AsyncTask<List<Wallet>, Void, Void> {
 
         private final WalletDao walletDao;
 
@@ -45,8 +50,23 @@ public class WalletRepository {
         }
 
         @Override
-        protected Void doInBackground(WalletModel... walletModels) {
-            walletDao.insetNewWallet(walletModels[0]);
+        protected Void doInBackground(List<Wallet>... wallet) {
+
+            for (int position = 0; position < wallet[0].size(); position++) {
+
+                Wallet walletData = wallet[0].get(position);
+
+                WalletDatabaseModel walletDatabaseModel = new WalletDatabaseModel();
+                walletDatabaseModel.setUid(walletData.getGroupId());
+                walletDatabaseModel.setIvWallet(R.drawable.united_states);
+                walletDatabaseModel.setTvWalletName(walletData.getGroupName());
+                walletDatabaseModel.setTvCurrentBalance(String.valueOf(walletData.getGroupBalance()));
+                walletDatabaseModel.setTvLastActive(Utils.getDate(walletData.getGroupActiveTime()));
+                walletDatabaseModel.setTvMemberCount(walletData.getGroupMember());
+
+                walletDao.insetNewWallet(walletDatabaseModel);
+            }
+
             return null;
         }
     }

@@ -18,11 +18,14 @@ import com.example.famtrack.utils.DataMockUp;
 
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>{
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
+    private static final String TAG = "com.example.famtrack.view.CategoryAdapter";
     private final List<Category> categoryList;
     private OnItemClickListener onItemClickListener;
-    private SelectionTracker<Long> selectionTracker;
+    private SelectionTracker<Long> selectionTracker; // Recyclerview multi selection
+    private int lastPosition = RecyclerView.NO_POSITION; // Storing the last position user clicked on
+    private View lastView = null; // Storing the last view user clicked on
 
     public CategoryAdapter() {
         this.categoryList = DataMockUp.createCategoryList();
@@ -39,7 +42,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void onBindViewHolder(@NonNull CategoryAdapter.CategoryViewHolder holder, int position) {
         if (position != RecyclerView.NO_POSITION) {
             holder.getTvCategoryName().setText(categoryList.get(position).getTvCategoryName());
-//            holder.itemView.setActivated(selectionTracker.isSelected((long) position));
+            holder.itemView.setActivated(selectionTracker.isSelected((long) position));
         }
     }
 
@@ -63,15 +66,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(@Nullable String categoryId);
     }
 
-    public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView tvCategoryName;
-
-        private int lastPosition = RecyclerView.NO_POSITION;
-        private View lastView = null;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,22 +84,40 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         @Override
         public void onClick(View view) {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(view, getAdapterPosition());
 
-                Log.e("TAG", "lastPosition1: " + lastPosition);
+                // If the currently selected item's position is not the same as the last position
                 if (lastPosition != getAdapterPosition()) {
+
+                    // Set new selected item's position as the last selected position
                     lastPosition = getAdapterPosition();
-                    Log.e("TAG", "lastPosition2: " + lastPosition);
+                    // Activate the current view
                     view.setActivated(true);
 
+                    // If last view is not null
                     if (lastView != null) {
+
+                        // Deactivated last view
                         lastView.setActivated(false);
-                        Log.e("TAG", "onClick: called");
                     }
 
-                    Log.e("TAG", "lastView1: " + lastView);
+                    // Save currently selected view as last selected view
                     lastView = view;
-                    Log.e("TAG", "lastView2: " + lastView);
+                } else {
+
+                    // Set last position as -1 (For not selecting any item)
+                    lastPosition = RecyclerView.NO_POSITION;
+
+                    // Deactivated last view
+                    lastView.setActivated(false);
+
+                    // Set last view as null (Because no item is selected)
+                    lastView = null;
+                }
+
+                if (lastPosition != RecyclerView.NO_POSITION) {
+                    onItemClickListener.onItemClick(categoryList.get(lastPosition).getCategoryId());
+                } else {
+                    onItemClickListener.onItemClick(null);
                 }
             }
         }

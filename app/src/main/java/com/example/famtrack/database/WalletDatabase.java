@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {WalletModel.class}, version = 1)
+@Database(entities = {WalletDatabaseModel.class}, version = 2)
 public abstract class WalletDatabase extends RoomDatabase {
 
     public abstract WalletDao walletDao();

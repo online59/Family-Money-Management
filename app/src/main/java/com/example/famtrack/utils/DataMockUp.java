@@ -19,11 +19,12 @@ public class DataMockUp {
                 "Drinks", "Rents", "Troll Way", "Travel", "Clothing", "Utilities", "Groceries", "iTunes",
                 "Youtube Music", "Netflix", "Disney+ Hotstar", "Other"};
 
-        for (int i = 0; i < expenseCategoryList.length; i++) {
+        for (int itemNum = 0; itemNum < expenseCategoryList.length; itemNum++) {
             category = new Category();
-            category.setCategoryUid("categoryId" + i);
+            category.setCategoryUid("categoryId" + itemNum);
             category.setIconCategory(R.drawable.european_union);
-            category.setTvCategoryName(expenseCategoryList[i]);
+            category.setTvCategoryName(expenseCategoryList[itemNum]);
+            category.setCategoryId("categoryId" + itemNum);
 
             categoryList.add(category);
         }

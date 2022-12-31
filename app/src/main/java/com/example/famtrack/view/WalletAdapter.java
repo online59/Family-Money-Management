@@ -27,6 +27,9 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
         viewModel.requestAllWallet(path).observe(lifecycleOwner, requestedWalletList -> {
             walletList = requestedWalletList;
             notifyDataSetChanged();
+
+            // Insert wallet data from firebase to room database for later use
+            viewModel.insertWalletData(requestedWalletList);
         });
     }
 

@@ -14,7 +14,7 @@
 
     <color name="normal_text">#FF75777B</color>
     <color name="edit_text_outline">#FFB5A9F6</color>
-    <color name="selected_item_background_color">#AABB86FC</color>
+    <color name="selected_item_background_color">#44BB86FC</color>
     <color name="edit_text_background">#FFFAF9FF</color>
     <color name="inactive_button_background">#FFDCDBE1</color>
     <color name="inactive_button_text">#FFFBFBFB</color>

@@ -1,14 +1,16 @@
 package com.example.famtrack.database;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class WalletModel {
+public class WalletDatabaseModel {
 
-    @PrimaryKey(autoGenerate = true)
-    private int uid;
+    @NonNull
+    @PrimaryKey()
+    private String uid;
 
     @ColumnInfo(name = "wallet_image_res")
     private int ivWallet;
@@ -23,16 +25,16 @@ public class WalletModel {
     private   String tvLastActive;
 
     @ColumnInfo(name = "member_count")
-    private  String tvMemberCount;
+    private  int tvMemberCount;
 
-    public WalletModel() {
+    public WalletDatabaseModel() {
     }
 
-    public int getUid() {
+    public String getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(String uid) {
         this.uid = uid;
     }
 
@@ -68,11 +70,11 @@ public class WalletModel {
         this.tvLastActive = tvLastActive;
     }
 
-    public String getTvMemberCount() {
+    public int getTvMemberCount() {
         return tvMemberCount;
     }
 
-    public void setTvMemberCount(String tvMemberCount) {
+    public void setTvMemberCount(int tvMemberCount) {
         this.tvMemberCount = tvMemberCount;
     }
 }
