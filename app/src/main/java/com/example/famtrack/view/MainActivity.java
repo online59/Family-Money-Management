@@ -2,19 +2,13 @@ package com.example.famtrack.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.famtrack.R;
 
@@ -28,10 +22,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         myInit();
-        setupFragment();
+        inflateWalletFragment();
     }
 
-    private void setupFragment() {
+    private void inflateWalletFragment() {
         // First start the wallet fragment to show all user's wallets
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, WalletFragment.class, null, null)
@@ -44,11 +38,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeAsUpIndicator(R.drawable.icon_arrow_back); // Set icon for back button
-            actionBar.setDisplayHomeAsUpEnabled(true); // Add back button with selected icon
-            actionBar.setDisplayShowTitleEnabled(false); // Remove default title
+        ActionBar topBar = getSupportActionBar();
+        if (topBar != null) {
+            topBar.setHomeAsUpIndicator(R.drawable.icon_arrow_back); // Set icon for back button
+            topBar.setDisplayHomeAsUpEnabled(true); // Add back button with selected icon
+            topBar.setDisplayShowTitleEnabled(false); // Remove default title
         }
     }
 
@@ -63,10 +57,10 @@ public class MainActivity extends AppCompatActivity {
 
         Intent toAddPaymentPage = new Intent(this, AddPayment.class);
 
-        int id = item.getItemId();
-        if (id == R.id.menu_add_payment) {
+        int menuItemId = item.getItemId();
+        if (menuItemId == R.id.menu_add_payment) {
             startActivity(toAddPaymentPage);
-        } else if (id == android.R.id.home) {
+        } else if (menuItemId == android.R.id.home) {
             onBackPressed(); // Back to previous page
         }
         return true;

@@ -48,18 +48,15 @@ public class WalletFragment extends Fragment {
     }
 
     private void setupRecyclerView(View view) {
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_wallet);
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        WalletAdapter adapter = new WalletAdapter(userUid, viewModel, this);
+        RecyclerView walletRecyclerView = view.findViewById(R.id.recycler_view_wallet);
+        RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        WalletAdapter walletAdapter = new WalletAdapter(userUid, viewModel, this);
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setAdapter(adapter);
+        walletRecyclerView.setHasFixedSize(true);
+        walletRecyclerView.setLayoutManager(linearLayoutManager);
+        walletRecyclerView.setAdapter(walletAdapter);
 
-        // Handling click events
-        adapter.setOnItemClickListener((position, walletUid) -> {
-            openSelectedWallet(walletUid);
-        });
+        walletAdapter.setOnItemClickListener((position, walletUid) -> openSelectedWallet(walletUid));
     }
 
     private void myInit() {

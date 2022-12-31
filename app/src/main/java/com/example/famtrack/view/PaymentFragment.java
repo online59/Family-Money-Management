@@ -46,22 +46,22 @@ public class PaymentFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_payment, container, false);
         myInit();
-        setupRecyclerView(view);
+        setupPaymentRecyclerView(view);
         return view;
     }
 
-    private void setupRecyclerView(View view) {
-        RecyclerView recyclerView = view.findViewById(R.id.recycler_view_payment);
+    private void setupPaymentRecyclerView(View view) {
+        RecyclerView paymentRecyclerView = view.findViewById(R.id.recycler_view_payment);
         RecyclerView.LayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         PaymentAdapter paymentAdapter = new PaymentAdapter(walletUid, viewModel, this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         HeaderItemDecoration headerItemDecoration = new HeaderItemDecoration(true, getHeaderCallback(paymentAdapter));
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(paymentAdapter);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.addItemDecoration(headerItemDecoration);
+        paymentRecyclerView.setHasFixedSize(true);
+        paymentRecyclerView.setLayoutManager(linearLayoutManager);
+        paymentRecyclerView.setAdapter(paymentAdapter);
+        paymentRecyclerView.addItemDecoration(dividerItemDecoration);
+        paymentRecyclerView.addItemDecoration(headerItemDecoration);
 
         // Set item click listener
         paymentAdapter.setOnItemClickListener(position -> Log.e(TAG, "onItemClick: " + position));
