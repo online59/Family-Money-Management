@@ -71,6 +71,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         @Override
         public void onClick(View view) {
+
             if (onItemClickListener != null) {
 
                 Log.e(TAG, "onClick: " + view.getId());
@@ -83,6 +84,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
                     // Activate the current view
                     view.setActivated(true);
+                    setIsRecyclable(false);
 
                     // If last view is not null
                     if (lastView != null) {
@@ -100,6 +102,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
                     // Deactivated last view
                     lastView.setActivated(false);
+                    setIsRecyclable(true);
 
                     // Set last view as null (Because no item is selected)
                     lastView = null;
