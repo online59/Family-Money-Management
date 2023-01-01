@@ -49,13 +49,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return categoryList == null ? 0 : categoryList.size();
     }
 
-
-    // Make the recycler view using each item's position as item id
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }

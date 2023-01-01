@@ -61,7 +61,6 @@ public class AddPayment extends AppCompatActivity {
         RecyclerView categoryRecyclerView = findViewById(R.id.category_recycler_view);
         RecyclerView.LayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.HORIZONTAL);
         CategoryAdapter categoryAdapter = new CategoryAdapter();
-        categoryAdapter.setHasStableIds(true);
 
         categoryRecyclerView.setHasFixedSize(true);
         categoryRecyclerView.setClipToPadding(true);
