@@ -10,7 +10,7 @@
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tv_title"
@@ -48,14 +48,14 @@
                 android:text="Amount" />
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_marginTop="12dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxCornerRadiusTopStart="@dimen/edit_text_corner"
-                app:boxCornerRadiusTopEnd="@dimen/edit_text_corner"
+                app:boxCornerRadiusBottomEnd="@dimen/edit_text_corner"
                 app:boxCornerRadiusBottomStart="@dimen/edit_text_corner"
-                app:boxCornerRadiusBottomEnd="@dimen/edit_text_corner">
+                app:boxCornerRadiusTopEnd="@dimen/edit_text_corner"
+                app:boxCornerRadiusTopStart="@dimen/edit_text_corner">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/edt_amount"
@@ -75,9 +75,9 @@
                 android:id="@+id/category_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/card_category"
                 android:layout_marginTop="12dp"
-                android:orientation="horizontal" />
+                android:orientation="horizontal"
+                tools:listitem="@layout/card_category" />
 
             <TextView
                 style="@style/NormalTextStyle"
@@ -99,6 +99,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Date" />
+
+            <TextView
+                android:id="@+id/tv_payment_date"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginTop="12dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:background="@drawable/ripple_background"
+                android:gravity="start|center_vertical" />
+
 
         </LinearLayout>
 

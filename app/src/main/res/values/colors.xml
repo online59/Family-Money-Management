@@ -19,4 +19,7 @@
     <color name="edit_text_background">#FFFAF9FF</color>
     <color name="inactive_button_background">#FFDCDBE1</color>
     <color name="inactive_button_text">#FFFBFBFB</color>
+
+
+    <color name="purple_500_50">#886200EE</color>
 </resources>

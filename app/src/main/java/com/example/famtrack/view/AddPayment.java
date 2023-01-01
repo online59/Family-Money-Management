@@ -1,8 +1,12 @@
 package com.example.famtrack.view;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.famtrack.R;
+import com.example.famtrack.utils.Utils;
 import com.example.famtrack.vm.MainViewModel;
+
+import java.util.Calendar;
 
 public class AddPayment extends AppCompatActivity {
 
@@ -45,7 +52,7 @@ public class AddPayment extends AppCompatActivity {
         smallWalletAdapter.setOnItemClickListener(new SmallWalletAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(@Nullable String selectWalletId) {
-                Log.e(TAG, "onItemClick: " + selectWalletId );
+                Log.e(TAG, "onItemClick: " + selectWalletId);
             }
         });
     }
@@ -54,6 +61,7 @@ public class AddPayment extends AppCompatActivity {
         RecyclerView categoryRecyclerView = findViewById(R.id.category_recycler_view);
         RecyclerView.LayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.HORIZONTAL);
         CategoryAdapter categoryAdapter = new CategoryAdapter();
+        categoryAdapter.setHasStableIds(true);
 
         categoryRecyclerView.setHasFixedSize(true);
         categoryRecyclerView.setClipToPadding(true);
@@ -80,6 +88,24 @@ public class AddPayment extends AppCompatActivity {
             topBar.setDisplayHomeAsUpEnabled(true); // Add back button with selected icon
             topBar.setDisplayShowTitleEnabled(false); // Remove default title
         }
+
+        TextView tvSelectData = findViewById(R.id.tv_payment_date);
+        tvSelectData.setText(Utils.getCurrentDate());
+        tvSelectData.setOnClickListener(selectDateDialog(tvSelectData)); // Open dialog to select date
+    }
+
+    private View.OnClickListener selectDateDialog(TextView tvDate) {
+        return view -> {
+            final Calendar calendar = Calendar.getInstance();
+
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH);
+            int year = calendar.get(Calendar.YEAR);
+
+            new DatePickerDialog(AddPayment.this, (datePicker, y, m, d) -> {
+                tvDate.setText(Utils.getDate(y, m, d));
+            }, year, month, day).show();
+        };
     }
 
     @Override

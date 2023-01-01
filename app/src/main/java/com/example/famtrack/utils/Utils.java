@@ -20,4 +20,17 @@ public class Utils {
         SimpleDateFormat format = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
         return format.format(paymentDate);
     }
+
+    public static String getDate(int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        SimpleDateFormat format = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+        return format.format(calendar.getTime());
+    }
+
+    public static String getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+        return format.format(calendar.getTime());
+    }
 }

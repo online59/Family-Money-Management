@@ -49,6 +49,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return categoryList == null ? 0 : categoryList.size();
     }
 
+
+    // Make the recycler view using each item's position as item id
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
@@ -73,11 +80,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         public void onClick(View view) {
             if (onItemClickListener != null) {
 
+                Log.e(TAG, "onClick: " + view.getId());
+
                 // If the currently selected item's position is not the same as the last position
                 if (lastPosition != getAdapterPosition()) {
 
                     // Set new selected item's position as the last selected position
                     lastPosition = getAdapterPosition();
+
                     // Activate the current view
                     view.setActivated(true);
 
