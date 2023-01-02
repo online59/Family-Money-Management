@@ -69,7 +69,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public interface OnItemClickListener {
-        void onItemClick(@Nullable String categoryId);
+        void onItemClick(@Nullable String categoryId, @Nullable String categoryName);
     }
 
     public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -128,9 +128,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 }
 
                 if (lastPosition != RecyclerView.NO_POSITION) {
-                    onItemClickListener.onItemClick(categoryList.get(lastPosition).getCategoryId());
+                    onItemClickListener.onItemClick(categoryList.get(lastPosition).getCategoryId(), categoryList.get(lastPosition).getTvCategoryName());
                 } else {
-                    onItemClickListener.onItemClick(null);
+                    onItemClickListener.onItemClick(null, null);
                 }
             }
         }

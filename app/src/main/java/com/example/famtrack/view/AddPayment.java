@@ -1,12 +1,16 @@
 package com.example.famtrack.view;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.famtrack.R;
+import com.example.famtrack.api.Payment;
+import com.example.famtrack.utils.Constants;
 import com.example.famtrack.utils.Utils;
 import com.example.famtrack.vm.MainViewModel;
 
@@ -28,6 +34,10 @@ public class AddPayment extends AppCompatActivity {
 
     private static final String TAG = "com.example.famtrack.view.AddPayment";
     private MainViewModel viewModel;
+    int day, month, year;
+    private long transDate;
+    private int transImage;
+    private String transCategory, transCategoryId, transNote, transTotal, transWalletId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +47,60 @@ public class AddPayment extends AppCompatActivity {
         myInit();
         setupCategoryRecycler();
         setupSmallWalletRecycler();
+        requestAddPayment();
+    }
+
+    private void requestAddPayment() {
+        EditText edtNote = findViewById(R.id.edt_note);
+        EditText edtAmount = findViewById(R.id.edt_amount);
+
+        Button btnSave = findViewById(R.id.btn_save);
+        Payment payment = new Payment();
+
+        transImage = 0;
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (edtNote.getText() != null) {
+                    transNote = edtNote.getText().toString();
+                } else {
+                    transNote = "";
+                }
+
+                if (edtAmount.getText() != null || edtAmount.getText().toString().equals("")) {
+                    transTotal = edtAmount.getText().toString();
+                } else {
+                    edtAmount.getText().toString();
+                    edtAmount.requestFocus();
+                    edtAmount.setError("This field cannot be empty");
+                    return;
+                }
+
+                if (transWalletId == null) {
+                    Toast.makeText(AddPayment.this, "Please select wallet", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                transDate = Utils.getDateInLong(year, month, day);
+
+                payment.setPostTime(Utils.getSystemCurrentTimeInMilli());
+                payment.setTransDate(transDate);
+                payment.setTransCategory(transCategory);
+                payment.setTransCategoryId(transCategoryId);
+                payment.setTransNote(transNote);
+                payment.setTransTotal(transTotal);
+                payment.setTransWalletId(transWalletId);
+
+                viewModel.requestInsertPayment(transWalletId, payment);
+
+                // Launch wallet page
+                Intent toWallet = new Intent(AddPayment.this, MainActivity.class);
+                toWallet.putExtra(Constants.WALLET_UID_KEY, transWalletId);
+                startActivity(toWallet);
+                finish();
+            }
+        });
     }
 
     private void setupSmallWalletRecycler() {
@@ -53,6 +117,8 @@ public class AddPayment extends AppCompatActivity {
             @Override
             public void onItemClick(@Nullable String selectWalletId) {
                 Log.e(TAG, "onItemClick: " + selectWalletId);
+
+                transWalletId = selectWalletId;
             }
         });
     }
@@ -70,8 +136,11 @@ public class AddPayment extends AppCompatActivity {
 
         categoryAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(String categoryId) {
+            public void onItemClick(String categoryId, String categoryName) {
                 Log.e(TAG, "onItemClick: " + categoryId);
+
+                transCategory = categoryName;
+                transCategoryId = categoryId;
             }
         });
     }
@@ -95,15 +164,23 @@ public class AddPayment extends AppCompatActivity {
     }
 
     private View.OnClickListener selectDateDialog(TextView tvDate) {
-        return view -> {
-            final Calendar calendar = Calendar.getInstance();
 
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-            int month = calendar.get(Calendar.MONTH);
-            int year = calendar.get(Calendar.YEAR);
+        final Calendar calendar = Calendar.getInstance();
+
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        month = calendar.get(Calendar.MONTH);
+        year = calendar.get(Calendar.YEAR);
+
+        return view -> {
 
             new DatePickerDialog(AddPayment.this, (datePicker, y, m, d) -> {
+
                 tvDate.setText(Utils.getDate(y, m, d));
+
+                day = d;
+                month = m;
+                year = y;
+
             }, year, month, day).show();
         };
     }

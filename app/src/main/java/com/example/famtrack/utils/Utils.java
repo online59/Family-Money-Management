@@ -28,9 +28,19 @@ public class Utils {
         return format.format(calendar.getTime());
     }
 
+    public static long getDateInLong(int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        return calendar.getTime().getTime();
+    }
+
     public static String getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
         return format.format(calendar.getTime());
+    }
+
+    public static long getSystemCurrentTimeInMilli() {
+        return System.currentTimeMillis();
     }
 }

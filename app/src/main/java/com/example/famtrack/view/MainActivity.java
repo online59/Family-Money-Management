@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.famtrack.R;
+import com.example.famtrack.utils.Constants;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +23,33 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         myInit();
-        inflateWalletFragment();
+
+        if (getIntentResult() != null) {
+            openSelectedWallet(getIntentResult());
+        } else {
+            inflateWalletFragment();
+        }
+
+    }
+
+    private String getIntentResult() {
+        String walletId = null;
+
+        if (getIntent() != null) {
+            walletId = getIntent().getStringExtra(Constants.WALLET_UID_KEY);
+        }
+
+        return  walletId;
+    }
+
+    private void openSelectedWallet(String uid) {
+        Bundle walletUid = new Bundle();
+        walletUid.putString(Constants.WALLET_UID_KEY, uid);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, PaymentFragment.class, walletUid)
+                .addToBackStack(null) // Add fragment to back stack
+                .commit();
     }
 
     private void inflateWalletFragment() {
