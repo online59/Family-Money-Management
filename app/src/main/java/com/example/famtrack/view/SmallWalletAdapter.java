@@ -18,6 +18,7 @@ import com.example.famtrack.vm.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SmallWalletAdapter extends RecyclerView.Adapter<SmallWalletAdapter.SmallWalletViewHolder> {
 
@@ -25,6 +26,7 @@ public class SmallWalletAdapter extends RecyclerView.Adapter<SmallWalletAdapter.
     private OnItemClickListener onItemClickListener;
     private int lastPosition = RecyclerView.NO_POSITION;
     private View lastView = null;
+    private String lastWalletId = null;
 
     public SmallWalletAdapter(MainViewModel viewModel, LifecycleOwner lifecycleOwner) {
 
@@ -49,6 +51,15 @@ public class SmallWalletAdapter extends RecyclerView.Adapter<SmallWalletAdapter.
             holder.getIconWallet().setImageResource(walletData.getIvWallet());
             holder.getTvWalletName().setText(walletData.getTvWalletName());
             holder.getTvWalletBalance().setText(walletData.getTvCurrentBalance());
+
+            // Activated view if current item is the selected item
+            if (Objects.equals(walletData.getUid(), lastWalletId)) {
+                holder.itemView.setActivated(true);
+                lastPosition = holder.getAdapterPosition(); // Update last position as the recycler view rearrange the position
+                lastView = holder.itemView; // Update the last view as the recycler view reuse the view
+            } else {
+                holder.itemView.setActivated(false);
+            }
         }
     }
 
@@ -88,6 +99,10 @@ public class SmallWalletAdapter extends RecyclerView.Adapter<SmallWalletAdapter.
 
                     // Set new selected item's position as the last selected position
                     lastPosition = getAdapterPosition();
+
+                    // Set last wallet id to currently selected wallet id
+                    lastWalletId = walletList.get(getAdapterPosition()).getUid();
+
                     // Activate the current view
                     view.setActivated(true);
 
@@ -105,6 +120,9 @@ public class SmallWalletAdapter extends RecyclerView.Adapter<SmallWalletAdapter.
 
                     // Set last position as -1 (For not selecting any item)
                     lastPosition = RecyclerView.NO_POSITION;
+
+                    // Set last wallet id to null
+                    lastWalletId = null;
 
                     // Deactivated last view
                     lastView.setActivated(false);

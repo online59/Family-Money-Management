@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.selection.ItemDetailsLookup;
-import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.famtrack.R;
@@ -17,6 +15,7 @@ import com.example.famtrack.api.Category;
 import com.example.famtrack.utils.DataMockUp;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 
@@ -25,6 +24,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     private OnItemClickListener onItemClickListener;
     private int lastPosition = RecyclerView.NO_POSITION; // Storing the last position user clicked on
     private View lastView = null; // Storing the last view user clicked on
+    private String lastCategoryId = null; // Storing the last category view user clicked on
 
     public CategoryAdapter() {
         this.categoryList = DataMockUp.createCategoryList();
@@ -40,7 +40,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.CategoryViewHolder holder, int position) {
         if (position != RecyclerView.NO_POSITION) {
-            holder.getTvCategoryName().setText(categoryList.get(position).getTvCategoryName());
+            Category categoryData = categoryList.get(position);
+            holder.getTvCategoryName().setText(categoryData.getTvCategoryName());
+
+            // Activated view if current item is the selected item
+            if (Objects.equals(categoryData.getCategoryId(), lastCategoryId)) {
+                holder.getTvCategoryName().setActivated(true);
+                lastPosition = holder.getAdapterPosition(); // Update last position as the recycler view rearrange the position
+                lastView = holder.getTvCategoryName(); // Update the last view as the recycler view reuse the view
+            } else {
+                holder.getTvCategoryName().setActivated(false);
+            }
         }
     }
 
@@ -87,9 +97,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                     // Set new selected item's position as the last selected position
                     lastPosition = getAdapterPosition();
 
+                    // Set new category id as the last selected item id
+                    lastCategoryId = categoryList.get(getAdapterPosition()).getCategoryId();
+
                     // Activate the current view
                     view.setActivated(true);
-                    setIsRecyclable(false);
 
                     // If last view is not null
                     if (lastView != null) {
@@ -105,9 +117,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                     // Set last position as -1 (For not selecting any item)
                     lastPosition = RecyclerView.NO_POSITION;
 
+                    // Set the last category id  as null (for not selecting any item)
+                    lastCategoryId = null;
+
                     // Deactivated last view
                     lastView.setActivated(false);
-                    setIsRecyclable(true);
 
                     // Set last view as null (Because no item is selected)
                     lastView = null;
