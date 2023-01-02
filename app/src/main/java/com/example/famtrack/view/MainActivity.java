@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             walletId = getIntent().getStringExtra(Constants.WALLET_UID_KEY);
         }
 
-        return  walletId;
+        return walletId;
     }
 
     private void openSelectedWallet(String uid) {
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, PaymentFragment.class, walletUid)
-                .addToBackStack(null) // Add fragment to back stack
+                .addToBackStack(null)
                 .commit();
     }
 
