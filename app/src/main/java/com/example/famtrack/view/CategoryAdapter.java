@@ -49,6 +49,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         return categoryList == null ? 0 : categoryList.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
