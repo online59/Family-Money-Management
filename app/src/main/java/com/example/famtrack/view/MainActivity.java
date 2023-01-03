@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         myInit();
+        Log.e(TAG, "onCreate: called" + getIntentResult());
 
         if (getIntentResult() != null) {
             openSelectedWallet(getIntentResult());

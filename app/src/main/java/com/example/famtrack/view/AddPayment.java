@@ -90,6 +90,7 @@ public class AddPayment extends AppCompatActivity {
             // Launch wallet page
             Intent toWallet = new Intent(AddPayment.this, MainActivity.class);
             toWallet.putExtra(Constants.WALLET_UID_KEY, transWalletId);
+            toWallet.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(toWallet);
             finish();
         });
