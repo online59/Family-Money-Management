@@ -24,24 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         myInit();
-        Log.e(TAG, "onCreate: called" + getIntentResult());
-
-        if (getIntentResult() != null) {
-            openSelectedWallet(getIntentResult());
-        } else {
-            inflateWalletFragment();
-        }
-
-    }
-
-    private String getIntentResult() {
-        String walletId = null;
-
-        if (getIntent() != null) {
-            walletId = getIntent().getStringExtra(Constants.WALLET_UID_KEY);
-        }
-
-        return walletId;
+        inflateWalletFragment();
     }
 
     private void openSelectedWallet(String uid) {
@@ -87,10 +70,15 @@ public class MainActivity extends AppCompatActivity {
         Intent toAddPaymentPage = new Intent(this, AddPayment.class);
 
         int menuItemId = item.getItemId();
+
         if (menuItemId == R.id.menu_add_payment) {
+
             startActivity(toAddPaymentPage);
+
         } else if (menuItemId == android.R.id.home) {
+
             onBackPressed(); // Back to previous page
+
         }
         return true;
     }
@@ -98,8 +86,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Check if item in back stack is not less than 1
-        if (!(getSupportFragmentManager().getBackStackEntryCount() <= 1)) {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             super.onBackPressed();
+        }
+    }
+
+
+    // Get intent from AddPayment class
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        // Get walletUid
+        String walletUid = intent.getStringExtra(Constants.WALLET_UID_KEY);
+
+        if (walletUid != null) {
+            // Open a fragment and show the payments of the specific wallet
+            openSelectedWallet(walletUid);
         }
     }
 }
