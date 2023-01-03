@@ -40,6 +40,11 @@ public class HeaderItemDecoration extends RecyclerView.ItemDecoration {
         Log.e(TAG, "getItemOffsets: called" );
 
         int position = parent.getChildAdapterPosition(view);
+
+        if (mHeaderView == null) {
+            return;
+        }
+
         if (headerCallback.isHeader(position)) {
             outRect.top = mHeaderView.getHeight();
         }
