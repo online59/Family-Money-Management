@@ -5,14 +5,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.famtrack.R;
 import com.example.famtrack.utils.Constants;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +29,14 @@ public class MainActivity extends AppCompatActivity {
 
         myInit();
         inflateWalletFragment();
+        addPayment();
+    }
+
+    private void addPayment() {
+        FloatingActionButton fabAddPayment = findViewById(R.id.fab_add_payment);
+
+        Intent toAddPaymentPage = new Intent(this, AddPayment.class);
+        fabAddPayment.setOnClickListener(view -> startActivity(toAddPaymentPage));
     }
 
     private void openSelectedWallet(String uid) {
@@ -40,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
     private void inflateWalletFragment() {
         // First start the wallet fragment to show all user's wallets
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, WalletFragment.class, null, null)
-                .addToBackStack(null) // Add fragment to back stack
+                .replace(R.id.fragment_container, WalletFragment.class, null, Constants.TAG_WALLET_FRAGMENT)
+                .addToBackStack(Constants.STACK_WALLET_PAGE) // Add fragment to back stack
                 .commit();
     }
 
@@ -85,9 +97,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Check if item in back stack is not less than 1
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            super.onBackPressed();
+        // Find the wallet fragment by its tag
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment walletFragment = fragmentManager.findFragmentByTag(Constants.TAG_WALLET_FRAGMENT);
+
+        if (walletFragment != null && fragmentManager.getBackStackEntryCount() > 0) {
+
+            // Go back util find a wallet fragment
+            while(!walletFragment.isVisible()) {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -101,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         String walletUid = intent.getStringExtra(Constants.WALLET_UID_KEY);
 
         if (walletUid != null) {
+
             // Open a fragment and show the payments of the specific wallet
             openSelectedWallet(walletUid);
         }
