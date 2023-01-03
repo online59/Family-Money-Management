@@ -3,8 +3,8 @@ package com.example.famtrack.api;
 public class Payment implements Comparable<Payment>{
 
     private long postTime, transDate;
-    private int transImage;
-    private String transCategory, transCategoryId, transNote, transTotal, transWalletId;
+    private int transImage, transTotal;
+    private String transCategory, transCategoryId, transNote, transWalletId;
 
     // Override compareTo method from Comparable interface
     @Override
@@ -86,11 +86,11 @@ public class Payment implements Comparable<Payment>{
         this.transNote = transNote;
     }
 
-    public String getTransTotal() {
+    public int getTransTotal() {
         return transTotal;
     }
 
-    public void setTransTotal(String transTotal) {
+    public void setTransTotal(int transTotal) {
         this.transTotal = transTotal;
     }
 

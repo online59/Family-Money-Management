@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,8 +35,8 @@ public class AddPayment extends AppCompatActivity {
     private MainViewModel viewModel;
     int day, month, year;
     private long transDate;
-    private int transImage;
-    private String transCategory, transCategoryId, transNote, transTotal, transWalletId;
+    private int transImage, transTotal;
+    private String transCategory, transCategoryId, transNote, transWalletId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,48 +57,41 @@ public class AddPayment extends AppCompatActivity {
         Payment payment = new Payment();
 
         transImage = 0;
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnSave.setOnClickListener(view -> {
 
-                if (edtNote.getText() != null) {
-                    transNote = edtNote.getText().toString();
-                } else {
-                    transNote = "";
-                }
-
-                if (edtAmount.getText() != null || edtAmount.getText().toString().equals("")) {
-                    transTotal = edtAmount.getText().toString();
-                } else {
-                    edtAmount.getText().toString();
-                    edtAmount.requestFocus();
-                    edtAmount.setError("This field cannot be empty");
-                    return;
-                }
-
-                if (transWalletId == null) {
-                    Toast.makeText(AddPayment.this, "Please select wallet", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                transDate = Utils.getDateInLong(year, month, day);
-
-                payment.setPostTime(Utils.getSystemCurrentTimeInMilli());
-                payment.setTransDate(transDate);
-                payment.setTransCategory(transCategory);
-                payment.setTransCategoryId(transCategoryId);
-                payment.setTransNote(transNote);
-                payment.setTransTotal(transTotal);
-                payment.setTransWalletId(transWalletId);
-
-                viewModel.requestInsertPayment(transWalletId, payment);
-
-                // Launch wallet page
-                Intent toWallet = new Intent(AddPayment.this, MainActivity.class);
-                toWallet.putExtra(Constants.WALLET_UID_KEY, transWalletId);
-                startActivity(toWallet);
-                finish();
+            if (!edtAmount.getText().toString().trim().isEmpty()) {
+                transTotal = Integer.parseInt(edtAmount.getText().toString().trim());
+            } else {
+                edtAmount.setError("This field cannot be empty");
+                Toast.makeText(AddPayment.this, "This field cannot be empty", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            if (transWalletId == null) {
+                Toast.makeText(AddPayment.this, "Please select wallet", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            transDate = Utils.getDateInLong(year, month, day);
+            transNote = edtNote.getText().toString().trim();
+
+
+            payment.setPostTime(Utils.getSystemCurrentTimeInMilli());
+            payment.setTransImage(R.drawable.european_union);
+            payment.setTransDate(transDate);
+            payment.setTransCategory(transCategory);
+            payment.setTransCategoryId(transCategoryId);
+            payment.setTransNote(transNote);
+            payment.setTransTotal(transTotal);
+            payment.setTransWalletId(transWalletId);
+
+            viewModel.requestInsertPayment("HTtFP8Oh1hd1nDUxzufhdMBzHx93", payment);
+
+            // Launch wallet page
+            Intent toWallet = new Intent(AddPayment.this, MainActivity.class);
+            toWallet.putExtra(Constants.WALLET_UID_KEY, transWalletId);
+            startActivity(toWallet);
+            finish();
         });
     }
 
@@ -113,13 +105,10 @@ public class AddPayment extends AppCompatActivity {
         walletRecyclerView.setLayoutManager(linearLayoutManager);
         walletRecyclerView.setAdapter(smallWalletAdapter);
 
-        smallWalletAdapter.setOnItemClickListener(new SmallWalletAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(@Nullable String selectWalletId) {
-                Log.e(TAG, "onItemClick: " + selectWalletId);
+        smallWalletAdapter.setOnItemClickListener(selectWalletId -> {
+            Log.e(TAG, "onItemClick: " + selectWalletId);
 
-                transWalletId = selectWalletId;
-            }
+            transWalletId = selectWalletId;
         });
     }
 
@@ -134,14 +123,11 @@ public class AddPayment extends AppCompatActivity {
         categoryRecyclerView.setLayoutManager(staggeredGridLayoutManager);
         categoryRecyclerView.setAdapter(categoryAdapter);
 
-        categoryAdapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(String categoryId, String categoryName) {
-                Log.e(TAG, "onItemClick: " + categoryId);
+        categoryAdapter.setOnItemClickListener((categoryId, categoryName) -> {
+            Log.e(TAG, "onItemClick: " + categoryId);
 
-                transCategory = categoryName;
-                transCategoryId = categoryId;
-            }
+            transCategory = categoryName;
+            transCategoryId = categoryId;
         });
     }
 
@@ -171,18 +157,15 @@ public class AddPayment extends AppCompatActivity {
         month = calendar.get(Calendar.MONTH);
         year = calendar.get(Calendar.YEAR);
 
-        return view -> {
+        return view -> new DatePickerDialog(AddPayment.this, (datePicker, y, m, d) -> {
 
-            new DatePickerDialog(AddPayment.this, (datePicker, y, m, d) -> {
+            tvDate.setText(Utils.getDate(y, m, d));
 
-                tvDate.setText(Utils.getDate(y, m, d));
+            day = d;
+            month = m;
+            year = y;
 
-                day = d;
-                month = m;
-                year = y;
-
-            }, year, month, day).show();
-        };
+        }, year, month, day).show();
     }
 
     @Override

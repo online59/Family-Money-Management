@@ -1,6 +1,5 @@
 package com.example.famtrack.view;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,10 +85,10 @@ public class PaymentAdapter extends RecyclerView.Adapter<PaymentAdapter.PaymentV
     @Override
     public void onBindViewHolder(@NonNull PaymentViewHolder holder, int position) {
         if (position != RecyclerView.NO_POSITION) {
-            Payment item = sortedPaymentList.get(position);
-            holder.getIconPayment().setImageResource(R.drawable.united_kingdom);
-            holder.getTvPaymentType().setText(item.getTransCategory());
-            holder.getTvAmount().setText(item.getTransTotal());
+            Payment paymentData = sortedPaymentList.get(position);
+            holder.getIconPayment().setImageResource(paymentData.getTransImage());
+            holder.getTvPaymentType().setText(paymentData.getTransCategory());
+            holder.getTvAmount().setText(String.valueOf(paymentData.getTransTotal()));
         }
     }
 

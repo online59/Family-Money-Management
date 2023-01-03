@@ -6,9 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -92,6 +89,7 @@ public class ServerDao {
     }
 
     public void requestInsertPayment(@NonNull String walletUid, Payment paymentData) {
+
         // Put data in hashmap type
         Map<String, Object> paymentHashMap = new HashMap<>();
         paymentHashMap.put(firebaseReferenceAPI.push().getKey(), paymentData);
@@ -99,9 +97,25 @@ public class ServerDao {
         firebaseReferenceAPI.child("trans").child(walletUid).updateChildren(paymentHashMap)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.i(TAG, "onComplete: New payment is added to the firebase database");
+                        Log.i(TAG, "requestInsertPayment: Add payment success fully");
                     }
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "onFailure: ", e));
+    }
+
+    public void requestUpdateWalletData(@NonNull String userUid, @NonNull String walletUid, Payment paymentData) {
+
+        // Put data in hashmap type
+        Map<String, Object> walletHashmap = new HashMap<>();
+        walletHashmap.put("groupActiveTime", paymentData.getPostTime());
+        walletHashmap.put("groupBalance", paymentData.getTransTotal());
+
+        firebaseReferenceAPI.child("user").child(userUid).child("groups").child(walletUid).updateChildren(walletHashmap)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.i(TAG, "requestUpdateWalletData: Update payment successfully");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "requestUpdateWalletData: ", e));
     }
 }

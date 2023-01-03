@@ -34,8 +34,9 @@ public class MainViewModel extends AndroidViewModel {
         return firebaseRepository.requestAllPayment(path);
     }
 
-    public void requestInsertPayment(String walletUid, Payment paymentData) {
-        firebaseRepository.requestInsertPayment(walletUid, paymentData);
+    public void requestInsertPayment(String userUid, Payment paymentData) {
+        firebaseRepository.requestInsertPayment(paymentData.getTransWalletId(), paymentData);
+        firebaseRepository.requestUpdateWalletData(userUid, paymentData.getTransWalletId(), paymentData);
     }
 
 

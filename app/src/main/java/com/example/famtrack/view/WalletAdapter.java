@@ -43,12 +43,12 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletView
     @Override
     public void onBindViewHolder(@NonNull WalletViewHolder holder, int position) {
         if (position != RecyclerView.NO_POSITION) {
-            Wallet item = walletList.get(position);
+            Wallet walletData = walletList.get(position);
             holder.getIconWallet().setImageResource(R.drawable.united_states);
-            holder.getTvCurrentBalance().setText(String.valueOf(item.getGroupBalance()));
-            holder.getTvWalletName().setText(item.getGroupName());
-            holder.getTvLastActiveTime().setText(Utils.getDate(item.getGroupActiveTime()));
-            holder.getTvMemberCount().setText(String.valueOf(item.getGroupMember()));
+            holder.getTvCurrentBalance().setText(String.valueOf(walletData.getGroupBalance()));
+            holder.getTvWalletName().setText(walletData.getGroupName());
+            holder.getTvLastActiveTime().setText(Utils.getDate(walletData.getGroupActiveTime()));
+            holder.getTvMemberCount().setText(String.valueOf(walletData.getGroupMember()));
         }
     }
 
