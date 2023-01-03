@@ -10,7 +10,9 @@
 
     <!-- Color for decrease, increase data -->
     <color name="dark_green">#FF338F40</color>
+    <color name="light_green">#FF00c853</color>
     <color name="dark_red">#FFAD2E2C</color>
+    <color name="light_red">#FFf44336</color>
 
     <color name="normal_text">#FF75777B</color>
     <color name="button_ripple_color">#55ABABAB</color>

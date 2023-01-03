@@ -39,6 +39,10 @@ public class MainViewModel extends AndroidViewModel {
         firebaseRepository.requestUpdateWalletData(userUid, paymentData.getTransWalletId(), paymentData);
     }
 
+    public void requestCreateWallet(String userUid, String walletName) {
+        firebaseRepository.requestCreateWallet(userUid, walletName);
+    }
+
 
 
     public LiveData<List<WalletDatabaseModel>> getAllWallet() {

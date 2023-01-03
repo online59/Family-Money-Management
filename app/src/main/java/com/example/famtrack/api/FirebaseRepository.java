@@ -37,4 +37,8 @@ public class FirebaseRepository {
     public void requestUpdateWalletData(@NonNull String userUid, @NonNull String walletUid, Payment paymentData) {
         serverDao.requestUpdateWalletData(userUid, walletUid, paymentData);
     }
+
+    public void requestCreateWallet(@NonNull String userUid, @NonNull String walletName) {
+        serverDao.requestCreateWallet(userUid, walletName);
+    }
 }

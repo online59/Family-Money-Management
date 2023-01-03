@@ -2,10 +2,8 @@ package com.example.famtrack.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -13,14 +11,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.famtrack.R;
+import com.example.famtrack.helper.CreateWalletDialog;
 import com.example.famtrack.utils.Constants;
+import com.example.famtrack.vm.MainViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "com.example.famtrack.view.MainActivity";
+    private String userUid = "HTtFP8Oh1hd1nDUxzufhdMBzHx93";
+    private MainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
             topBar.setDisplayHomeAsUpEnabled(true); // Add back button with selected icon
             topBar.setDisplayShowTitleEnabled(false); // Remove default title
         }
+
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
     }
 
     @Override
@@ -83,15 +88,20 @@ public class MainActivity extends AppCompatActivity {
 
         int menuItemId = item.getItemId();
 
-        if (menuItemId == R.id.menu_add_payment) {
-
-            startActivity(toAddPaymentPage);
-
-        } else if (menuItemId == android.R.id.home) {
+        if (menuItemId == android.R.id.home) {
 
             onBackPressed(); // Back to previous page
 
+        } else if (menuItemId == R.id.menu_add_payment) {
+
+            startActivity(toAddPaymentPage);
+
+        } else if (menuItemId == R.id.menu_new_wallet) {
+            CreateWalletDialog createWalletDialog = new CreateWalletDialog();
+            createWalletDialog.show(getSupportFragmentManager(), null);
+            createWalletDialog.setOnDialogClickListener(walletName -> viewModel.requestCreateWallet(userUid, walletName));
         }
+
         return true;
     }
 
@@ -104,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
         if (walletFragment != null && fragmentManager.getBackStackEntryCount() > 0) {
 
             // Go back util find a wallet fragment
-            while(!walletFragment.isVisible()) {
+            while (!walletFragment.isVisible()) {
                 super.onBackPressed();
             }
         }

@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.famtrack.R;
+import com.example.famtrack.utils.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,7 +44,7 @@ public class ServerDao {
 
         MutableLiveData<List<Wallet>> mutableWalletList = new MutableLiveData<>();
 
-        firebaseReferenceAPI.child("user").child(userUid).child("groups").addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseReferenceAPI.child("user").child(userUid).child("groups").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -117,5 +119,27 @@ public class ServerDao {
                     }
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "requestUpdateWalletData: ", e));
+    }
+
+    public void requestCreateWallet(String userUid, String walletName) {
+
+        Wallet walletData = new Wallet();
+        walletData.setGroupBalance(0);
+        walletData.setGroupActiveTime(Utils.getSystemCurrentTimeInMilli());
+        walletData.setGroupId(firebaseReferenceAPI.push().getKey());
+        walletData.setGroupImage(String.valueOf(R.drawable.european_union));
+        walletData.setGroupMember(1);
+        walletData.setGroupName(walletName);
+
+        Map<String, Object> walletHashmap = new HashMap<>();
+        walletHashmap.put(walletData.getGroupId(), walletData);
+
+        firebaseReferenceAPI.child("user").child(userUid).child("groups").updateChildren(walletHashmap)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.i(TAG, "requestCreateWallet: Successfully create new wallet");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e(TAG, "requestCreateWallet: ", e));
     }
 }
