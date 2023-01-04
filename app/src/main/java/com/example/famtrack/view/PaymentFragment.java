@@ -2,6 +2,8 @@ package com.example.famtrack.view;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -10,13 +12,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.famtrack.R;
 import com.example.famtrack.helper.HeaderItemDecoration;
 import com.example.famtrack.utils.Constants;
 import com.example.famtrack.vm.MainViewModel;
+
+import java.util.Objects;
 
 public class PaymentFragment extends Fragment {
 
@@ -38,6 +46,9 @@ public class PaymentFragment extends Fragment {
         if (getArguments() != null) {
             walletUid = getArguments().getString(Constants.WALLET_UID_KEY);
         }
+
+        // To indicate that the fragment has an options menu
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -86,5 +97,24 @@ public class PaymentFragment extends Fragment {
                 return paymentAdapter.getHeader(position);
             }
         };
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.wallet_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem menuItem) {
+        int menuId = menuItem.getItemId();
+        if (menuId == R.id.menu_invite_member) {
+            Toast.makeText(getContext(), "Invite Member", Toast.LENGTH_SHORT).show();
+        } else if (menuId == R.id.menu_edit_group) {
+            Toast.makeText(getContext(), "Edit Group", Toast.LENGTH_SHORT).show();
+        } else if (menuId == android.R.id.home) {
+            requireActivity().onBackPressed();
+        }
+        return false;
     }
 }
