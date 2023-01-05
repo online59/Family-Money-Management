@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -97,9 +99,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(toAddPaymentPage);
 
         } else if (menuItemId == R.id.menu_new_wallet) {
+
             CreateWalletDialog createWalletDialog = new CreateWalletDialog();
             createWalletDialog.show(getSupportFragmentManager(), null);
             createWalletDialog.setOnDialogClickListener(walletName -> viewModel.requestCreateWallet(userUid, walletName));
+
+        } else if (menuItemId == R.id.menu_invite_member) {
+
+            Toast.makeText(this, "Invite Member", Toast.LENGTH_SHORT).show();
+
+        } else if (menuItemId == R.id.menu_edit_group) {
+
+            Toast.makeText(this, "Edit Group", Toast.LENGTH_SHORT).show();
+
         }
 
         return true;

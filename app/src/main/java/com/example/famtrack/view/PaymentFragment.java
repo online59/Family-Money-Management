@@ -104,17 +104,4 @@ public class PaymentFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.wallet_menu, menu);
     }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem menuItem) {
-        int menuId = menuItem.getItemId();
-        if (menuId == R.id.menu_invite_member) {
-            Toast.makeText(getContext(), "Invite Member", Toast.LENGTH_SHORT).show();
-        } else if (menuId == R.id.menu_edit_group) {
-            Toast.makeText(getContext(), "Edit Group", Toast.LENGTH_SHORT).show();
-        } else if (menuId == android.R.id.home) {
-            requireActivity().onBackPressed();
-        }
-        return false;
-    }
 }
